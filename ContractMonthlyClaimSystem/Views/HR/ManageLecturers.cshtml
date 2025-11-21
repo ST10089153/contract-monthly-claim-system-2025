@@ -1,39 +1,124 @@
-﻿@model IEnumerable<CMCS.Models.User>
-
+﻿
+@model IEnumerable<CMCS.Models.User>
 @{
-    ViewData["Title"] = "Manage Lecturers";
+    ViewData["Title"] = "Manage Users";
 }
 
 <div class="container mt-4">
-    <h2>Manage Lecturers</h2>
-    <p class="text-muted">View and manage lecturer information</p>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Manage Users</h2>
+            <p class="text-muted">Create, update, and manage all system users</p>
+        </div>
+        <a asp-action="CreateUser" class="btn btn-success btn-lg">
+            <i class="bi bi-person-plus"></i> Create New User
+        </a>
+    </div>
+
     <hr />
 
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Filter by Role:</label>
+                    <select class="form-select" id="roleFilter">
+                        <option value="">All Roles</option>
+                        <option value="Lecturer">Lecturer</option>
+                        <option value="Programme Coordinator">Programme Coordinator</option>
+                        <option value="Academic Manager">Academic Manager</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Filter by Status:</label>
+                    <select class="form-select" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Search:</label>
+                    <input type="text" class="form-control" id="searchBox" placeholder="Search by name or email...">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="table-responsive">
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered table-hover" id="usersTable">
             <thead class="table-dark">
                 <tr>
-                    <th>Lecturer ID</th>
+                    <th>ID</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Username</th>
+                    <th>Role</th>
+                    <th>Hourly Rate</th>
                     <th>Status</th>
                     <th>Created Date</th>
-                    <th>Actions</th>
+                    <th style="width: 220px;">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @if (Model != null && Model.Any())
                 {
-                    @foreach (var lecturer in Model)
+                    @foreach (var user in Model)
                     {
-                        <tr>
-                            <td>@lecturer.UserId</td>
-                            <td>@lecturer.FullName</td>
-                            <td>@lecturer.Email</td>
-                            <td>@lecturer.Username</td>
+                        <tr data-role="@user.Role" data-status="@(user.IsActive ? "Active" : "Inactive")">
+                            <td>@user.UserId</td>
                             <td>
-                                @if (lecturer.IsActive)
+                                <strong>@user.FullName</strong><br />
+                                <small class="text-muted">@user.FirstName @user.LastName</small>
+                            </td>
+                            <td>@user.Email</td>
+                            <td>@user.Username</td>
+                            <td>
+                                @if (user.Role == "Lecturer")
+                                {
+                                    <span class="badge bg-primary">@user.Role</span>
+                                }
+                                else if (user.Role == "Programme Coordinator")
+                                {
+                                    <span class="badge bg-info">@user.Role</span>
+                                }
+                                else if (user.Role == "Academic Manager")
+                                {
+                                    <span class="badge bg-warning">@user.Role</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@user.Role</span>
+                                }
+                            </td>
+                            <td>
+                                @if (user.Role == "Lecturer")
+                                {
+                                    <strong>R @user.HourlyRate.ToString("N2")</strong>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">N/A</span>
+                                }
+                            </td>
+                            <td>
+                                @if (user.IsActive)
                                 {
                                     <span class="badge bg-success">Active</span>
                                 }
@@ -42,9 +127,31 @@
                                     <span class="badge bg-secondary">Inactive</span>
                                 }
                             </td>
-                            <td>@lecturer.CreatedDate.ToString("dd MMM yyyy")</td>
+                            <td>@user.CreatedDate.ToString("dd MMM yyyy")</td>
                             <td>
-                                <a href="#" class="btn btn-sm btn-info">View Details</a>
+                                <div class="btn-group-vertical btn-group-sm" role="group">
+                                    <a asp-action="EditUser" asp-route-id="@user.UserId" class="btn btn-warning btn-sm">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+                                    
+                                    @if (user.IsActive)
+                                    {
+                                        <form method="post" asp-action="DeactivateUser" asp-route-id="@user.UserId" class="d-inline">
+                                            <button type="submit" class="btn btn-danger btn-sm w-100" 
+                                                    onclick="return confirm('Deactivate user @user.FullName?')">
+                                                <i class="bi bi-x-circle"></i> Deactivate
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form method="post" asp-action="ActivateUser" asp-route-id="@user.UserId" class="d-inline">
+                                            <button type="submit" class="btn btn-success btn-sm w-100">
+                                                <i class="bi bi-check-circle"></i> Activate
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
                             </td>
                         </tr>
                     }
@@ -52,7 +159,10 @@
                 else
                 {
                     <tr>
-                        <td colspan="7" class="text-center">No lecturers found</td>
+                        <td colspan="9" class="text-center text-muted">
+                            <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+                            <p>No users found. Click "Create New User" to add users.</p>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -60,6 +170,43 @@
     </div>
 
     <div class="mt-3">
-        <a asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Dashboard
+        </a>
+        <a asp-action="CreateUser" class="btn btn-success">
+            <i class="bi bi-person-plus"></i> Create New User
+        </a>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#roleFilter, #statusFilter, #searchBox').on('change keyup', function () {
+                filterTable();
+            });
+
+            function filterTable() {
+                const roleFilter = $('#roleFilter').val().toLowerCase();
+                const statusFilter = $('#statusFilter').val().toLowerCase();
+                const searchText = $('#searchBox').val().toLowerCase();
+
+                $('#usersTable tbody tr').each(function () {
+                    const row = $(this);
+                    const role = row.data('role') ? row.data('role').toString().toLowerCase() : '';
+                    const status = row.data('status') ? row.data('status').toString().toLowerCase() : '';
+                    const text = row.text().toLowerCase();
+
+                    let show = true;
+
+                    if (roleFilter && role !== roleFilter) show = false;
+                    if (statusFilter && status !== statusFilter) show = false;
+                    if (searchText && !text.includes(searchText)) show = false;
+
+                    row.toggle(show);
+                });
+            }
+        });
+    </script>
+}

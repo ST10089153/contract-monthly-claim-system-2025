@@ -60,6 +60,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/charn/source/repos/ContractMonthlyClaimSystem/ContractMonthlyClaimSystem/Views/HR/CreateUser.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSFJcQ3JlYXRlVXNlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/charn/source/repos/ContractMonthlyClaimSystem/ContractMonthlyClaimSystem/Views/HR/EditUser.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSFJcRWRpdFVzZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/charn/source/repos/ContractMonthlyClaimSystem/ContractMonthlyClaimSystem/Views/HR/GenerateInvoices.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSFJcR2VuZXJhdGVJbnZvaWNlcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

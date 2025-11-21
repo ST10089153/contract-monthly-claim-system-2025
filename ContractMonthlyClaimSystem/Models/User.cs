@@ -11,28 +11,35 @@ namespace CMCS.Models
         public string Password { get; set; }
         public string Email { get; set; }
 
-        // UPDATED to match Seeder
+        // Role properties
         public string RoleType { get; set; } // Lecturer, Coordinator, Manager, HR
-
-        // Optional but you had "Role" – keep both if needed
         public string Role { get; set; }
 
+        // Name properties
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
-
-        // Seeder requires this:
         public string DisplayName { get; set; }
 
+        // Dates
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+
+        // Status
         public bool IsActive { get; set; } = true;
+
+        // HR MANAGEMENT REQUIREMENT: HourlyRate for ALL users (only lecturers use it)
+        public decimal HourlyRate { get; set; } = 0m;
+
+        // Optional - only used by Lecturer subclass if you need it
+        public string Department { get; set; }
 
         // Convenience property
         public string FullName => $"{FirstName} {LastName}";
     }
 
+    // You can still keep this if you need specialized Lecturer functionality
     public class Lecturer : User
     {
-        public decimal HourlyRate { get; set; }
-        public string Department { get; set; }
+        // Inherits HourlyRate from User
+        // Can add lecturer-specific properties here if needed
     }
 }

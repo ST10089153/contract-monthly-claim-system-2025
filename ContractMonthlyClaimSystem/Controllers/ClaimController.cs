@@ -15,6 +15,7 @@ namespace CMCS.Controllers
     {
         private readonly DataService _dataService;
         private readonly IWebHostEnvironment _environment;
+        private const decimal MAX_HOURS_PER_MONTH = 180m; // Maximum hours allowed per month
 
         public ClaimController(DataService dataService, IWebHostEnvironment environment)
         {
@@ -29,25 +30,61 @@ namespace CMCS.Controllers
             if (userRole != "Lecturer")
                 return RedirectToAction("Login", "Account");
 
+            // Get lecturer's hourly rate from user profile
+            var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            var user = _dataService.GetUserById(userId);
+
+            if (user != null)
+            {
+                ViewBag.HourlyRate = user.HourlyRate;
+                ViewBag.LecturerName = user.FullName;
+            }
+
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Submit(ClaimSubmissionViewModel model)
         {
+            var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            var user = _dataService.GetUserById(userId);
+
             if (ModelState.IsValid)
             {
-                var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
                 var fullName = HttpContext.Session.GetString("FullName");
+
+                // NEW: Validate monthly hours don't exceed 180
+                var currentMonth = DateTime.Now;
+                var existingClaims = _dataService.GetClaimsByLecturer(userId)
+                    .Where(c => c.ClaimMonth.Year == currentMonth.Year
+                             && c.ClaimMonth.Month == currentMonth.Month
+                             && c.Status != "Rejected")
+                    .ToList();
+
+                var totalHoursThisMonth = existingClaims.Sum(c => c.HoursWorked);
+                var newTotal = totalHoursThisMonth + model.HoursWorked;
+
+                if (newTotal > MAX_HOURS_PER_MONTH)
+                {
+                    ModelState.AddModelError("HoursWorked",
+                        $"Total hours for this month would be {newTotal:F2}, which exceeds the maximum of {MAX_HOURS_PER_MONTH} hours. " +
+                        $"You have already claimed {totalHoursThisMonth:F2} hours this month.");
+
+                    ViewBag.HourlyRate = user?.HourlyRate ?? 0;
+                    ViewBag.LecturerName = user?.FullName ?? fullName;
+                    return View(model);
+                }
 
                 var claim = new Claim
                 {
                     LecturerId = userId,
                     LecturerName = fullName,
+                    ClaimMonth = DateTime.Now, // Set to current month
                     HoursWorked = model.HoursWorked,
-                    HourlyRate = model.HourlyRate,
-                    TotalAmount = model.HoursWorked * model.HourlyRate,
+                    HourlyRate = user?.HourlyRate ?? model.HourlyRate, // Use user's hourly rate
+                    TotalAmount = model.HoursWorked * (user?.HourlyRate ?? model.HourlyRate),
                     Notes = model.Notes,
+                    ReferenceNumber = GenerateReferenceNumber(),
                     Documents = new List<Document>() // Ensure not null
                 };
 
@@ -76,11 +113,13 @@ namespace CMCS.Controllers
                 }
 
                 _dataService.AddClaim(claim);
-                TempData["Success"] = "Claim submitted successfully!";
+                TempData["Success"] = $"Claim submitted successfully! You have used {newTotal:F2} of {MAX_HOURS_PER_MONTH} hours this month.";
 
                 return RedirectToAction("MyClaims", "Claim");
             }
 
+            ViewBag.HourlyRate = user?.HourlyRate ?? 0;
+            ViewBag.LecturerName = user?.FullName ?? "";
             return View(model);
         }
 
@@ -146,6 +185,12 @@ namespace CMCS.Controllers
                 return NotFound();
 
             return View(claim);
+        }
+
+        // Helper method to generate unique reference number
+        private string GenerateReferenceNumber()
+        {
+            return $"CLM-{DateTime.Now:yyyyMMdd}-{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}";
         }
     }
 }

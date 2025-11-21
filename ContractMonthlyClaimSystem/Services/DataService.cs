@@ -31,13 +31,13 @@ namespace CMCS.Services
                 var users = new List<User>
                 {
                     new User { UserId = 1, Username = "lecturer1", Password = "password", Email = "lecturer1@example.com",
-                             Role = "Lecturer", FirstName = "John", LastName = "Doe", CreatedDate = DateTime.Now },
+                             Role = "Lecturer", FirstName = "John", LastName = "Doe", HourlyRate = 350.00m, IsActive = true, CreatedDate = DateTime.Now },
                     new User { UserId = 2, Username = "coordinator1", Password = "password", Email = "coord1@example.com",
-                             Role = "Coordinator", FirstName = "Jane", LastName = "Smith", CreatedDate = DateTime.Now },
+                             Role = "Programme Coordinator", FirstName = "Jane", LastName = "Smith", HourlyRate = 0, IsActive = true, CreatedDate = DateTime.Now },
                     new User { UserId = 3, Username = "manager1", Password = "password", Email = "manager1@example.com",
-                             Role = "Manager", FirstName = "Mike", LastName = "Johnson", CreatedDate = DateTime.Now },
+                             Role = "Academic Manager", FirstName = "Mike", LastName = "Johnson", HourlyRate = 0, IsActive = true, CreatedDate = DateTime.Now },
                     new User { UserId = 4, Username = "hr1", Password = "password", Email = "hr1@example.com",
-                             Role = "HR", FirstName = "Sarah", LastName = "Williams", CreatedDate = DateTime.Now }
+                             Role = "HR", FirstName = "Sarah", LastName = "Williams", HourlyRate = 0, IsActive = true, CreatedDate = DateTime.Now }
                 };
                 SaveUsers(users);
             }
@@ -47,6 +47,8 @@ namespace CMCS.Services
                 SaveClaims(new List<Claim>());
             }
         }
+
+        // ============== EXISTING USER METHODS ==============
 
         public List<User> GetUsers()
         {
@@ -71,6 +73,94 @@ namespace CMCS.Services
             var json = JsonSerializer.Serialize(users, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(_usersFile, json);
         }
+
+        // ============== NEW HR USER MANAGEMENT METHODS ==============
+
+        /// <summary>
+        /// Get all users (for HR management)
+        /// </summary>
+        public List<User> GetAllUsers()
+        {
+            return GetUsers();
+        }
+
+        /// <summary>
+        /// Check if username already exists
+        /// </summary>
+        public bool UsernameExists(string username)
+        {
+            var users = GetUsers();
+            return users.Any(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
+        /// Check if email already exists
+        /// </summary>
+        public bool EmailExists(string email)
+        {
+            var users = GetUsers();
+            return users.Any(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
+        /// Create a new user (HR function)
+        /// </summary>
+        public void CreateUser(User newUser)
+        {
+            var users = GetUsers();
+
+            // Auto-generate UserId
+            newUser.UserId = users.Any() ? users.Max(u => u.UserId) + 1 : 1;
+
+            // Set defaults
+            newUser.CreatedDate = DateTime.Now;
+            newUser.IsActive = true;
+
+            users.Add(newUser);
+            SaveUsers(users);
+        }
+
+        /// <summary>
+        /// Update an existing user (HR function)
+        /// </summary>
+        public void UpdateUser(User updatedUser)
+        {
+            var users = GetUsers();
+            var existingUser = users.FirstOrDefault(u => u.UserId == updatedUser.UserId);
+
+            if (existingUser != null)
+            {
+                var index = users.IndexOf(existingUser);
+                users[index] = updatedUser;
+                SaveUsers(users);
+            }
+        }
+
+        /// <summary>
+        /// Delete a user (HR function - use with caution)
+        /// </summary>
+        public void DeleteUser(int userId)
+        {
+            var users = GetUsers();
+            var user = users.FirstOrDefault(u => u.UserId == userId);
+
+            if (user != null)
+            {
+                users.Remove(user);
+                SaveUsers(users);
+            }
+        }
+
+        /// <summary>
+        /// Get users by role
+        /// </summary>
+        public List<User> GetUsersByRole(string role)
+        {
+            var users = GetUsers();
+            return users.Where(u => u.Role == role).ToList();
+        }
+
+        // ============== EXISTING CLAIM METHODS ==============
 
         public List<Claim> GetClaims()
         {
