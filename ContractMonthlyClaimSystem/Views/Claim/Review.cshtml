@@ -1,0 +1,83 @@
+﻿@model List<CMCS.Models.Claim>
+@{
+    ViewData["Title"] = "Review Claims";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>Review Claims</h2>
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Claim ID</th>
+                            <th>Lecturer</th>
+                            <th>Submission Date</th>
+                            <th>Hours</th>
+                            <th>Rate</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var claim in Model.OrderByDescending(c => c.SubmissionDate))
+                        {
+                            <tr>
+                                <td>#@claim.ClaimId</td>
+                                <td>@claim.LecturerName</td>
+                                <td>@claim.SubmissionDate.ToString("yyyy-MM-dd")</td>
+                                <td>@claim.HoursWorked</td>
+                                <td>R @claim.HourlyRate</td>
+                                <td>R @claim.TotalAmount.ToString("N2")</td>
+                                <td>
+                                    @if (claim.Status == "Pending")
+                                    {
+                                        <span class="badge bg-warning">@claim.Status</span>
+                                    }
+                                    else if (claim.Status == "Approved")
+                                    {
+                                        <span class="badge bg-success">@claim.Status</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">@claim.Status</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (claim.Status == "Pending")
+                                    {
+                                        <form asp-action="Approve" asp-route-id="@claim.ClaimId" method="post" style="display:inline;">
+                                            <button type="submit" class="btn btn-sm btn-success">
+                                                <i class="bi bi-check"></i> Approve
+                                            </button>
+                                        </form>
+                                        <form asp-action="Reject" asp-route-id="@claim.ClaimId" method="post" style="display:inline;">
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="bi bi-x"></i> Reject
+                                            </button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> No claims to review at this time.
+            </div>
+        }
+    </div>
+</div>

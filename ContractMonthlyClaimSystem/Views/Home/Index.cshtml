@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h1 class="display-4">Dashboard</h1>
+        <p class="lead">Welcome to the Contract Monthly Claim System</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-file-earmark-text"></i> Total Claims
+                </h5>
+                <h2 class="card-text">@ViewBag.TotalClaims</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-clock-history"></i> Pending
+                </h5>
+                <h2 class="card-text">@ViewBag.PendingClaims</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-check-circle"></i> Approved
+                </h5>
+                <h2 class="card-text">@ViewBag.ApprovedClaims</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-danger text-white">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-x-circle"></i> Rejected
+                </h5>
+                <h2 class="card-text">@ViewBag.RejectedClaims</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <h3>Quick Actions</h3>
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    @if (ViewBag.UserRole == "Lecturer")
+    {
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="bi bi-plus-circle" style="font-size: 48px; color: #667eea;"></i>
+                    <h5 class="card-title mt-3">Submit New Claim</h5>
+                    <p class="card-text">Create a new monthly claim submission</p>
+                    <a asp-controller="Claim" asp-action="Submit" class="btn btn-primary">Submit Claim</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="bi bi-list-check" style="font-size: 48px; color: #667eea;"></i>
+                    <h5 class="card-title mt-3">View My Claims</h5>
+                    <p class="card-text">Check status of your submitted claims</p>
+                    <a asp-controller="Claim" asp-action="MyClaims" class="btn btn-primary">View Claims</a>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (ViewBag.UserRole == "Coordinator" || ViewBag.UserRole == "Manager")
+    {
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="bi bi-clipboard-check" style="font-size: 48px; color: #667eea;"></i>
+                    <h5 class="card-title mt-3">Review Claims</h5>
+                    <p class="card-text">Approve or reject pending claims</p>
+                    <a asp-controller="Claim" asp-action="Review" class="btn btn-primary">Review Claims</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

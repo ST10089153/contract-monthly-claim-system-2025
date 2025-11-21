@@ -1,0 +1,73 @@
+﻿@model CMCS.Models.Claim
+@{
+    ViewData["Title"] = "Track Claim";
+}
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h3><i class="bi bi-search"></i> Claim Details - #@Model.ClaimId</h3>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Claim ID:</dt>
+                    <dd class="col-sm-8">#@Model.ClaimId</dd>
+
+                    <dt class="col-sm-4">Submission Date:</dt>
+                    <dd class="col-sm-8">@Model.SubmissionDate.ToString("yyyy-MM-dd HH:mm")</dd>
+
+                    <dt class="col-sm-4">Hours Worked:</dt>
+                    <dd class="col-sm-8">@Model.HoursWorked</dd>
+
+                    <dt class="col-sm-4">Hourly Rate:</dt>
+                    <dd class="col-sm-8">R @Model.HourlyRate</dd>
+
+                    <dt class="col-sm-4">Total Amount:</dt>
+                    <dd class="col-sm-8"><strong>R @Model.TotalAmount.ToString("N2")</strong></dd>
+
+                    <dt class="col-sm-4">Status:</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.Status == "Pending")
+                        {
+                            <span class="badge bg-warning">@Model.Status</span>
+                        }
+                        else if (Model.Status == "Approved")
+                        {
+                            <span class="badge bg-success">@Model.Status</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">@Model.Status</span>
+                        }
+                    </dd>
+
+                    @if (!string.IsNullOrEmpty(Model.Notes))
+                    {
+                        <dt class="col-sm-4">Notes:</dt>
+                        <dd class="col-sm-8">@Model.Notes</dd>
+                    }
+
+                    @if (Model.Documents != null && Model.Documents.Any())
+                    {
+                        <dt class="col-sm-4">Documents:</dt>
+                        <dd class="col-sm-8">
+                            @foreach (var doc in Model.Documents)
+                            {
+                                <div>
+                                    <i class="bi bi-file-earmark"></i> @doc.FileName
+                                </div>
+                            }
+                        </dd>
+                    }
+                </dl>
+
+                <div class="mt-3">
+                    <a asp-action="ViewClaims" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Back to My Claims
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Lecturer Dashboard";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>Lecturer Dashboard</h2>
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Claims</h5>
+                <h2 class="card-text">@ViewBag.TotalClaims</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <h5 class="card-title">Pending Claims</h5>
+                <h2 class="card-text">@ViewBag.PendingClaims</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Approved Claims</h5>
+                <h2 class="card-text">@ViewBag.ApprovedClaims</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="bi bi-plus-circle" style="font-size: 48px; color: #007bff;"></i>
+                <h5 class="card-title mt-3">Submit New Claim</h5>
+                <p class="card-text">Create a new monthly claim submission</p>
+                <a asp-action="SubmitClaim" class="btn btn-primary">Submit Claim</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="bi bi-list" style="font-size: 48px; color: #007bff;"></i>
+                <h5 class="card-title mt-3">View My Claims</h5>
+                <p class="card-text">Check the status of your submitted claims</p>
+                <a asp-action="ViewClaims" class="btn btn-primary">View Claims</a>
+            </div>
+        </div>
+    </div>
+</div>

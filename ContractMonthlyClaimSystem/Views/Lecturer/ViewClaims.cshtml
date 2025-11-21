@@ -1,0 +1,65 @@
+﻿@model List<CMCS.Models.Claim>
+@{
+    ViewData["Title"] = "My Claims";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h2>My Claims</h2>
+        <a asp-action="SubmitClaim" class="btn btn-primary mb-3">Submit New Claim</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        @if (Model.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Claim ID</th>
+                        <th>Date</th>
+                        <th>Hours</th>
+                        <th>Rate</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var claim in Model.OrderByDescending(c => c.SubmissionDate))
+                    {
+                        <tr>
+                            <td>#@claim.ClaimId</td>
+                            <td>@claim.SubmissionDate.ToString("yyyy-MM-dd")</td>
+                            <td>@claim.HoursWorked</td>
+                            <td>R @claim.HourlyRate</td>
+                            <td>R @claim.TotalAmount.ToString("N2")</td>
+                            <td>
+                                @if (claim.Status == "Pending")
+                                {
+                                    <span class="badge bg-warning">Pending</span>
+                                }
+                                else if (claim.Status == "Approved")
+                                {
+                                    <span class="badge bg-success">Approved</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Rejected</span>
+                                }
+                            </td>
+                            <td>
+                                <a asp-action="TrackClaim" asp-route-id="@claim.ClaimId" class="btn btn-sm btn-info">Track</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No claims submitted yet.</p>
+        }
+    </div>
+</div>

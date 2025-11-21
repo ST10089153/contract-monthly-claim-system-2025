@@ -1,0 +1,32 @@
+[
+  {
+    "ClaimId": 1,
+    "LecturerId": 1,
+    "Lecturer": null,
+    "LecturerProfileId": null,
+    "LecturerProfile": null,
+    "ClaimMonth": "2025-11-01T00:00:00",
+    "HoursWorked": 100,
+    "HourlyRate": 50,
+    "TotalAmount": 5000,
+    "SubmissionDate": "2025-11-21T11:30:18.7887713+02:00",
+    "CoordinatorApprovalDate": null,
+    "ManagerApprovalDate": null,
+    "Status": "Approved",
+    "Notes": "overtime",
+    "Documents": [
+      {
+        "DocumentId": 0,
+        "ClaimId": 0,
+        "FileName": "waredrobe-staples-2000-5f84e831a7724a85ac523a88f514c168 (1).jpg",
+        "FilePath": "600f0f07-ec79-4c1a-9c4f-66e1de695df0_waredrobe-staples-2000-5f84e831a7724a85ac523a88f514c168 (1).jpg",
+        "UploadDate": "2025-11-21T11:30:18.7871637+02:00",
+        "FileSize": 62486,
+        "Claim": null
+      }
+    ],
+    "ApprovalHistories": [],
+    "LecturerName": "John Doe",
+    "ReferenceNumber": null
+  }
+]
