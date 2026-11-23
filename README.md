@@ -4,6 +4,8 @@ An ASP.NET Core MVC web app for handling monthly pay claims from contract lectur
 
 I built this as my final Portfolio of Evidence for PROG6212 (Programming 2B) in the BCAD programme at The Independent Institute of Education (Varsity College).
 
+> **Note:** This repository is a copy of my original submission repo, which lives in the college's GitHub Classroom organisation. Students can't change repository visibility there, so I moved the project to my own account to make it public. The full commit history came across with it: the original work dates from November 2025, and the later commits are fixes I made when I came back to it.
+
 ![.NET 8](https://img.shields.io/badge/.NET-8.0-512BD4) ![ASP.NET Core MVC](https://img.shields.io/badge/ASP.NET_Core-MVC-512BD4) ![C#](https://img.shields.io/badge/C%23-12-239120) ![Bootstrap 5](https://img.shields.io/badge/Bootstrap-5-7952B3)
 
 ---
