@@ -14,9 +14,9 @@ namespace CMCS.Models.ViewModels
         [Range(1, 10000, ErrorMessage = "Hourly rate must be between 1 and 10000")]
         public decimal HourlyRate { get; set; }
 
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
 
-        public IFormFile SupportingDocument { get; set; }
+        public IFormFile? SupportingDocument { get; set; }
 
         public decimal TotalAmount => HoursWorked * HourlyRate;
     }

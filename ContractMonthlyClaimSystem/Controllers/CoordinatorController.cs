@@ -43,6 +43,9 @@ namespace CMCS.Controllers
         [HttpPost]
         public IActionResult ApproveClaim(int id)
         {
+            if (HttpContext.Session.GetString("UserRole") != "Coordinator")
+                return RedirectToAction("Login", "Account");
+
             _dataService.UpdateClaimStatus(id, "Approved");
             TempData["Success"] = "Claim approved!";
             return RedirectToAction("ReviewClaims");
@@ -51,6 +54,9 @@ namespace CMCS.Controllers
         [HttpPost]
         public IActionResult RejectClaim(int id)
         {
+            if (HttpContext.Session.GetString("UserRole") != "Coordinator")
+                return RedirectToAction("Login", "Account");
+
             _dataService.UpdateClaimStatus(id, "Rejected");
             TempData["Warning"] = "Claim rejected.";
             return RedirectToAction("ReviewClaims");
