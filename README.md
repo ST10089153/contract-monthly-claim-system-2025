@@ -98,6 +98,6 @@ This is a student project, and I know where it falls short of production:
 
 ## About
 
-Built by **ST10089153**, BCAD student at IIE Varsity College.
+Built by **Charné Janse van Rensburg** (ST10089153), BCAD student at IIE Varsity College.
 
 This repository was submitted for academic assessment for PROG6212 and is not licensed for commercial use.
