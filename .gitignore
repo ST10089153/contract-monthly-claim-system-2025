@@ -6,6 +6,3 @@ obj/
 .vs/
 *.user
 *.suo
-
-# Local tooling
-.claude/

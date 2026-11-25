@@ -49,7 +49,7 @@
                                     }
                                     else
                                     {
-                                        <span class="badge bg-danger">@claim.Status</span>
+                                        <span class="badge @(claim.Status == "Paid" ? "bg-primary" : "bg-danger")">@claim.Status</span>
                                     }
                                 </td>
                                 <td>

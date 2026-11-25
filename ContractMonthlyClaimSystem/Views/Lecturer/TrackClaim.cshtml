@@ -38,7 +38,7 @@
                         }
                         else
                         {
-                            <span class="badge bg-danger">@Model.Status</span>
+                            <span class="badge @(Model.Status == "Paid" ? "bg-primary" : "bg-danger")">@Model.Status</span>
                         }
                     </dd>
 

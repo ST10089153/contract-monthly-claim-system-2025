@@ -33,6 +33,24 @@ There is no public sign-up page. HR creates every account and hands out the logi
 
 ---
 
+## Screenshots
+
+The screenshots use sample data (three lecturers with claims over three months).
+
+| Login | Lecturer dashboard |
+|---|---|
+| ![Login page](docs/screenshots/01-login.png) | ![Lecturer dashboard](docs/screenshots/02-lecturer-dashboard.png) |
+| **Submitting a claim** (the total updates as you type) | **A lecturer's claim history** |
+| ![Submit claim form](docs/screenshots/03-submit-claim.png) | ![My claims list](docs/screenshots/04-my-claims.png) |
+| **Coordinator reviewing pending claims** | **Manager dashboard** |
+| ![Coordinator review](docs/screenshots/05-coordinator-review.png) | ![Manager dashboard](docs/screenshots/06-manager-dashboard.png) |
+| **HR dashboard** | **HR user management** |
+| ![HR dashboard](docs/screenshots/07-hr-dashboard.png) | ![HR manage users](docs/screenshots/08-hr-manage-users.png) |
+| **HR monthly report** | |
+| ![HR monthly report](docs/screenshots/09-hr-monthly-report.png) | |
+
+---
+
 ## Tech stack
 
 - **Backend:** C#, ASP.NET Core 8 MVC (controllers and Razor views)

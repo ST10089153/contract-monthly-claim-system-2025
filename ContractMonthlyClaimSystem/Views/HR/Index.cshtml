@@ -21,8 +21,8 @@
     <div class="col-md-4">
         <div class="card bg-warning text-white">
             <div class="card-body">
-                <h5>Pending Invoices</h5>
-                <h2>@ViewBag.PendingInvoices</h2>
+                <h5>Pending Claims</h5>
+                <h2>@ViewBag.PendingClaims</h2>
             </div>
         </div>
     </div>
@@ -30,7 +30,7 @@
         <div class="card bg-info text-white">
             <div class="card-body">
                 <h5>Total Payments</h5>
-                <h3>R @ViewBag.TotalPayments</h3>
+                <h3>R @(((decimal)ViewBag.TotalPayments).ToString("N2"))</h3>
             </div>
         </div>
     </div>

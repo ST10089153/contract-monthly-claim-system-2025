@@ -38,7 +38,7 @@
         <div class="card bg-info text-white">
             <div class="card-body">
                 <h5 class="card-title">Total Amount</h5>
-                <h4 class="card-text">R @(ViewBag.TotalAmount ?? 0)</h4>
+                <h4 class="card-text">R @(((decimal?)ViewBag.TotalAmount ?? 0m).ToString("N2"))</h4>
             </div>
         </div>
     </div>

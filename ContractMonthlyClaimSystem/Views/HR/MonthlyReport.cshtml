@@ -64,7 +64,7 @@
                                 }
                                 else if (item.Status == "Rejected")
                                 {
-                                    <span class="badge bg-danger">@item.Status</span>
+                                    <span class="badge @(item.Status == "Paid" ? "bg-primary" : "bg-danger")">@item.Status</span>
                                 }
                                 else if (item.Status == "Paid")
                                 {
